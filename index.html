@@ -5,13 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recibo de Pago de Renta (Alquiler)</title>
 
-    <!-- === ÍCONOS Y MANIFEST PARA MÓVILES (PWA) === -->
+    <!-- === METADATOS PWA / INSTALACIÓN === -->
     <!-- Ícono para navegadores modernos (Favicon) -->
     <link rel="icon" type="image/png" href="app-icon.png">
     <!-- Ícono para pantallas de inicio de iOS (Apple Touch Icon) -->
     <link rel="apple-touch-icon" href="app-icon.png">
     <!-- Para Android/Windows: Color de la barra de título -->
     <meta name="theme-color" content="#1A73E8"> 
+    
+    <!-- LÍNEA CRÍTICA: Enlace al archivo manifest que permite la instalación PWA -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Meta tag para iOS: Permite modo standalone (fullscreen) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
     
     <!-- Incluir la librería PDFMake para generar el comprobante PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
@@ -448,7 +454,10 @@ document.addEventListener('DOMContentLoaded', () => {
         calculateTotals(); 
         
         if (typeof pdfMake === 'undefined') {
-            alert('Error: La librería pdfmake no está cargada.');
+            // Esto solo se mostraría si falla la carga de CDN, es una protección
+            console.error('Error: La librería pdfmake no está cargada.');
+            // Usamos un modal o mensaje personalizado en lugar de alert()
+            document.body.insertAdjacentHTML('beforeend', '<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);padding:20px;background:red;color:white;border-radius:8px;z-index:1000;">Error: Faltan archivos PDF. Recargue la página.</div>');
             return;
         }
 
